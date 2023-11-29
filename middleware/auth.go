@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/csv"
+	"fmt"
 	httpAuth "github.com/abbot/go-http-auth"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -52,33 +53,34 @@ func loadBasicAuthCredentials(htpasswdPath string) (map[string]string, error) {
 	return users, nil
 }
 
-func BasicAuthMiddleware(htpasswdPath string) gin.HandlerFunc {
+func validateUserPass(users map[string]string, username, password string) bool {
+	storedHash, ok := users[username]
+	if !ok {
+		// invalid user
+		return false
+	}
+	if !httpAuth.CheckSecret(password, storedHash) {
+		// invalid password
+		return false
+	}
+
+	return true
+}
+
+func BasicAuthMiddleware(htpasswdPath, realm string) gin.HandlerFunc {
 
 	users, err := loadBasicAuthCredentials(htpasswdPath)
 	if err != nil {
 		panic(err)
 	}
 
+	wwwAuthenticateHeader := fmt.Sprintf(`Basic realm="%s", charset="UTF-8"`, realm)
+
 	return func(ctx *gin.Context) {
 		username, password, ok := ctx.Request.BasicAuth()
-		if !ok {
-			// no credentials provided
-			ctx.Header("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-			ctx.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-
-		var storedHash string
-		storedHash, ok = users[username]
-		if !ok {
-			// invalid user
-			ctx.Header("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-			ctx.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-		if !httpAuth.CheckSecret(password, storedHash) {
-			// invalid password
-			ctx.Header("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+		if !ok || !validateUserPass(users, username, password) {
+			// no credentials provided, or the provided credentials are bad
+			ctx.Header("WWW-Authenticate", wwwAuthenticateHeader)
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}

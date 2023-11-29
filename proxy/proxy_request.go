@@ -58,11 +58,6 @@ func appendHostToXForwardHeader(header http.Header, host string) {
 }
 
 func ProxyRequest(body []byte, ctx *gin.Context) {
-	if ctx.Request.URL.Scheme != "http" && ctx.Request.URL.Scheme != "https" {
-		ctx.AbortWithStatus(400)
-		return
-	}
-
 	cl := http.Client{
 		Timeout: upstreamTimeout,
 	}
@@ -82,7 +77,7 @@ func ProxyRequest(body []byte, ctx *gin.Context) {
 	resp, err = cl.Do(req)
 	if err != nil {
 		middleware.GetLoggerFromCtx(ctx).Error("Error while making request to upstream", zap.Error(err))
-		ctx.AbortWithStatus(500)
+		ctx.AbortWithStatus(http.StatusBadGateway)
 		return
 	}
 	defer func(Body io.ReadCloser) {
@@ -100,4 +95,5 @@ func ProxyRequest(body []byte, ctx *gin.Context) {
 	if err != nil {
 		middleware.GetLoggerFromCtx(ctx).Error("Failed to copy body", zap.Int64("copied", copied), zap.Error(err))
 	}
+	middleware.GetLoggerFromCtx(ctx).Debug("Proxy complete", zap.Int64("upstreamResponseBodyLen", copied), zap.Int64("donwstreamRequestBodyLen", req.ContentLength), zap.Int("upstreamStatusCode", resp.StatusCode))
 }
