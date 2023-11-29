@@ -3,7 +3,7 @@ package proxy
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/marcsello/telegraf-auth-proxy/middleware"
+	"github.com/marcsello/telegraf-tag-auth-proxy/middleware"
 	"gitlab.com/MikeTTh/env"
 	"go.uber.org/zap"
 	"io"

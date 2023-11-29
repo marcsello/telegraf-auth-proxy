@@ -1,6 +1,6 @@
-module github.com/marcsello/telegraf-auth-proxy
+module github.com/marcsello/telegraf-tag-auth-proxy
 
-replace github.com/marcsello/telegraf-auth-proxy => ./
+replace github.com/marcsello/telegraf-tag-auth-proxy => ./
 
 go 1.21
 

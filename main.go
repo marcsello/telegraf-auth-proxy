@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/marcsello/telegraf-auth-proxy/handlers"
+	"github.com/marcsello/telegraf-tag-auth-proxy/handlers"
 	"gitlab.com/MikeTTh/env"
 	"go.uber.org/zap"
 )

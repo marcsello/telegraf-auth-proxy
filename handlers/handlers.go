@@ -5,7 +5,7 @@ import (
 	"github.com/influxdata/telegraf"
 	telegrafParsers "github.com/influxdata/telegraf/plugins/parsers"
 	_ "github.com/influxdata/telegraf/plugins/parsers/all"
-	"github.com/marcsello/telegraf-auth-proxy/middleware"
+	"github.com/marcsello/telegraf-tag-auth-proxy/middleware"
 	"gitlab.com/MikeTTh/env"
 	"go.uber.org/zap"
 	"strings"

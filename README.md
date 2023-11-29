@@ -1,4 +1,4 @@
-# Telegraf Auth Proxy
+# Telegraf Tag Auth Proxy
 
 For quite a while, I've been searching for a solution to properly authenticate remote metrics. I couldn't find one, so
 I've created one.
