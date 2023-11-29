@@ -1,5 +1,7 @@
 # Telegraf Tag Auth Proxy
 
+[![Build Status](https://drone.k8s.marcsello.com/api/badges/marcsello/telegraf-tag-auth-proxy/status.svg)](https://drone.k8s.marcsello.com/marcsello/telegraf-tag-auth-proxy)
+
 For quite a while, I've been searching for a solution to properly authenticate remote metrics. I couldn't find one, so
 I've created one.
 
@@ -36,7 +38,7 @@ This way, a single host credential cannot be used to submit metrics on behalf of
 
 ## Deploy
 
-TBD
+Get from DockerHub: `marcsello/telegraf-anti-cheat-proxy`
 
 ## Configuration
 
@@ -46,7 +48,7 @@ Aside from the htaccess file entries. This proxy can be configured trough envvar
 |--------------------------|-------------------|----------------------------------------------------------------------------|-----------------------------------------------------------|
 | `DEBUG`                  | `false`           | Enable debug logs                                                          |                                                           |
 | `BIND_ADDR`              | `:8000`           | Address to bind the http server                                            |                                                           |
-| `PROXY_UPSTREAM_URL`     |                   | The upstream URL to forward the requests to if the authentication succeeds |                                                           |
+| `PROXY_UPSTREAM_URL`     |                   | The upstream URL to forward the requests to if the authentication succeeds | This field is required                                    |
 | `PROXY_UPSTREAM_TIMEOUT` | `0`               | Timeout for the request towards the upstream. Set 0 to disable.            |                                                           |
 | `AUTH_TAG`               | `host`            | Tag to be checked to be the same as the username in basic auth.            |                                                           |
 | `MAX_BODY_LEN`           | `10737418240`     | Maximum size for parsing the request body. Extra bytes are dropped.        | The default is about 10M                                  |
