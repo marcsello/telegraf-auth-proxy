@@ -27,7 +27,7 @@ steps:
         - ${DRONE_BUILD_NUMBER}
     when:
       branch:
-        - master
+        - main
 
   - name: telegram
     image: appleboy/drone-telegram
