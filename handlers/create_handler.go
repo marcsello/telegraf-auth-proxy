@@ -104,7 +104,7 @@ func createHandler(parser telegraf.Parser) gin.HandlerFunc {
 			return
 		}
 
-		err = validateMetrics(bindFieldName, expectedUser, metrics)
+		err = validateMetrics(authenticatedTagName, expectedUser, metrics)
 		if err != nil {
 			middleware.GetLoggerFromCtx(ctx).Warn("Basic auth succeeded, but metric failed authentication! Ignoring...", zap.Error(err))
 			ctx.AbortWithStatus(http.StatusUnauthorized)

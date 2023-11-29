@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var bindFieldName = env.String("BIND_FIELD", "host")
+var authenticatedTagName = env.String("AUTH_TAG", "host")
 var maxBodyLen = env.Int("MAX_BODY_LEN", 10737418240)  // 10M by default
 var loadParsers = env.String("LOAD_PARSERS", "influx") // load parsers by their names
 
