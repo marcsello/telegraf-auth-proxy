@@ -28,7 +28,7 @@ func loadBasicAuthCredentials(htpasswdPath string) (map[string]string, error) {
 	// Adopted from here: https://github.com/abbot/go-http-auth/blob/master/users.go
 	var err error
 	var f *os.File
-	f, err = os.Open(htpasswdPath)
+	f, err = os.Open(htpasswdPath) //#nosec G304
 	if err != nil {
 		return nil, err
 	}
