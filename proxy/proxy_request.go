@@ -14,9 +14,7 @@ import (
 )
 
 // Inspiration taken from here: https://gist.github.com/yowu/f7dc34bd4736a65ff28d
-
-var upstreamUrl = env.StringOrPanic("PROXY_UPSTREAM_URL")
-var upstreamTimeout = env.Duration("PROXY_UPSTREAM_TIMEOUT", 0)
+var upstreamTimeout = env.Duration("PROXY_UPSTREAM_TIMEOUT", 0) // TODO: move this stuff to some struct for easier testing
 
 var dropHeaders = []string{
 	// Hop-by-hop headers. These are removed when sent to the backend.
@@ -57,14 +55,14 @@ func appendHostToXForwardHeader(header http.Header, host string) {
 	header.Set("X-Forwarded-For", host)
 }
 
-func ProxyRequest(body []byte, ctx *gin.Context) {
+func ProxyRequest(body []byte, ctx *gin.Context, upstreamURL string) {
 	cl := http.Client{
 		Timeout: upstreamTimeout,
 	}
 
 	bodyReader := bytes.NewReader(body)
 
-	req, err := http.NewRequestWithContext(ctx, ctx.Request.Method, upstreamUrl, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, ctx.Request.Method, upstreamURL, bodyReader)
 	copyHeaders(req.Header, ctx.Request.Header)
 
 	var clientIP string

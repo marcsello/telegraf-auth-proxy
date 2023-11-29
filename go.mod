@@ -9,6 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang/snappy v0.0.4
 	github.com/influxdata/telegraf v1.28.5
+	github.com/stretchr/testify v1.8.4
 	gitlab.com/MikeTTh/env v0.0.0-20231129141211-633d5922a426
 	go.uber.org/zap v1.26.0
 )
@@ -28,6 +29,7 @@ require (
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/compose-spec/compose-go v1.20.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dimchansky/utfbom v1.1.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/fxamacker/cbor v1.5.1 // indirect
@@ -62,6 +64,7 @@ require (
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/prometheus v0.46.0 // indirect

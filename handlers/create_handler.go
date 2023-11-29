@@ -3,7 +3,6 @@ package handlers
 import (
 	"bytes"
 	"compress/gzip"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/snappy"
 	"github.com/influxdata/telegraf"
@@ -42,30 +41,14 @@ func readBody(ctx *gin.Context) ([]byte, error) {
 	return io.ReadAll(r)
 }
 
-func validateMetrics(tagToCheck, expectedValue string, metrics []telegraf.Metric) error {
-	// validate tag(s)...
-	for i, metric := range metrics {
-		fieldValue, ok := metric.GetTag(tagToCheck)
-		if !ok {
-			// tag was not present, consider invalid
-			return fmt.Errorf("expected tag %s is not present in metric element %d", tagToCheck, i)
-		}
-		if fieldValue != expectedValue {
-			// tag have unexpected value, consider invalid
-			return fmt.Errorf("tag %s have unexpected value %s (expected %s) in metric element %d", tagToCheck, fieldValue, expectedValue, i)
-		}
-	}
-
-	// all went well
-	return nil
-}
-
-func createHandler(parser telegraf.Parser) gin.HandlerFunc {
+func createHandler(parser telegraf.Parser, upstreamURL string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// Parse and verify JSON
 		expectedUser, ok := middleware.GetBasicAuthUserFromCtx(ctx)
 		if !ok || expectedUser == "" {
-			ctx.Status(500) // middleware should have prevented this, so if we get there, something went wrong
+			// middleware should have prevented this, so if we get there, something went seriously wrong
+			middleware.GetLoggerFromCtx(ctx).Error("Could not get the user name from the context", zap.Bool("ok", ok))
+			ctx.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 		var err error
@@ -112,6 +95,6 @@ func createHandler(parser telegraf.Parser) gin.HandlerFunc {
 		}
 
 		// If all goes well, proxy the intact data
-		proxy.ProxyRequest(bodyBytes, ctx)
+		proxy.ProxyRequest(bodyBytes, ctx, upstreamURL)
 	}
 }

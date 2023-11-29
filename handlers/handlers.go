@@ -16,6 +16,9 @@ var maxBodyLen = env.Int("MAX_BODY_LEN", 10737418240)  // 10M by default
 var loadParsers = env.String("LOAD_PARSERS", "influx") // load parsers by their names
 
 func RegisterHandlers(r *gin.Engine, logger *zap.Logger) {
+
+	upstreamURL := env.StringOrPanic("PROXY_UPSTREAM_URL")
+
 	r.Use(middleware.GoodLoggerMiddleware(logger))
 	r.Use(middleware.BasicAuthMiddleware(
 		env.String("HTPASSWD_PATH", ".htpasswd"),
@@ -45,7 +48,7 @@ func RegisterHandlers(r *gin.Engine, logger *zap.Logger) {
 			}
 		}
 
-		handler := createHandler(parser)
+		handler := createHandler(parser, upstreamURL)
 		r.POST("/"+name, handler)
 		r.PUT("/"+name, handler)
 		loadedParserCnt++

@@ -14,6 +14,11 @@ steps:
     commands:
       - gosec ./...
 
+  - name: go_test
+    image: golang:1.21
+    commands:
+      - go test -v ./...
+
   - name: kaniko
     image: plugins/kaniko
     settings:
