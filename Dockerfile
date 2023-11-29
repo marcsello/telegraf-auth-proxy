@@ -12,4 +12,5 @@ RUN apk add --no-cache ca-certificates
 
 COPY --from=builder /src/main /app/main
 
+USER 1000
 ENTRYPOINT [ "/app/main" ]
